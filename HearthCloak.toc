@@ -1,0 +1,8 @@
+## Interface: 90002
+
+## Title: HearthCloak
+## Author: apottere
+## Version: @project-version@
+## X-Date: @project-date-iso@
+
+HearthCloak.lua
