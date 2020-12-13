@@ -198,7 +198,7 @@ local function cleanUp(data)
             ClearCursor()
             PickupContainerItem(found.bag, found.slot)
             PickupInventoryItem(data.inventorySlot)
-            log('Requipped ' .. data.replaceLink)
+            log('Reequipped ' .. data.replaceLink)
         else
             log('Unable to find replaced item in bags: ' .. data.replaceLink)
         end
