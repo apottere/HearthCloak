@@ -16,6 +16,23 @@ HEARTHCLOAK_DESTINATIONS = {
             spellId = 89158
         }
     },
+    ['stormwind'] = {
+        { -- Cloak of Coordination
+            itemId = 65360,
+            inventorySlot = INVSLOT_BACK,
+            spellId = 89157
+        },
+        { -- Wrap of Unity
+            itemId = 63206,
+            inventorySlot = INVSLOT_BACK,
+            spellId = 89157
+        },
+        { -- Shroud of Cooperation
+            itemId = 63352,
+            inventorySlot = INVSLOT_BACK,
+            spellId = 89157
+        }
+    },
     ['wotlk-dalaran'] = {
         { -- Band of the Kirin Tor
             itemId = 40586,
@@ -76,6 +93,13 @@ HEARTHCLOAK_DESTINATIONS = {
             itemId = 51558,
             inventorySlot = INVSLOT_FINGER1,
             spellId = 54406
+        },
+    },
+    ['legion-dalaran'] = {
+        { -- Empowered Ring of the Kirin Tor
+            itemId = 139599,
+            inventorySlot = INVSLOT_FINGER1,
+            spellId = 220989
         },
     },
 }
