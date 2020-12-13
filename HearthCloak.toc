@@ -5,4 +5,5 @@
 ## Version: @project-version@
 ## X-Date: @project-date-iso@
 
+data.lua
 HearthCloak.lua
