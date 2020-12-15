@@ -3,18 +3,31 @@ local _, ns = ...
 local destinations = HEARTHCLOAK_DESTINATIONS
 local color = '|cff42f58d'
 local reset = '|r'
-local equipping = nil
-local readyToCast = nil
-local casting = nil
+local state = nil
+local data = nil
 local frame = CreateFrame('Frame', nil, UIParent, 'BackdropTemplate')
 
 local function log(msg)
     print(color .. 'HearthCloak: ' .. msg .. reset)
 end
 
-local function prepareFrame(data)
-    readyToCast = data
+local function setState(newState, newData)
+    state = newState
+    if newData ~= nil then
+        data = newData
+    end
+end
+
+local function checkState(desiredState)
+    return state == desiredState and data ~= nil
+end
+
+local function prepareFrame()
+    setState('READY')
     frame.title:SetText(color .. 'HearthCloak: ' .. reset .. data.destination)
+    frame.cancel:Enable()
+    frame.teleport:Enable()
+    ActionButton_ShowOverlayGlow(frame.teleport)
     frame.teleport:SetAttribute('item', data.inventorySlot)
     frame.teleport.icon:SetTexture(data.texture)
     frame:Show()
@@ -187,17 +200,18 @@ local function port(msg)
     end
 
     if found.bag ~= nil then
-        equipping = found
+        setState('EQUIP', found)
         ClearCursor()
         PickupContainerItem(found.bag, found.slot)
         PickupInventoryItem(found.inventorySlot)
     else
-        prepareFrame(found)
+        setState('READY', found)
+        prepareFrame()
     end
 end
 
-local function cleanUp(data)
-    if data.bag ~= nil and data.replaceItemId ~= nil and data.replaceLink ~= nil then
+local function cleanup()
+    if data ~= nil and data.bag ~= nil and data.replaceItemId ~= nil and data.replaceLink ~= nil then
         local found = findReplacedGearInBags(data.replaceItemId, data.replaceLink, data.bag, data.slot)
         if found ~= nil then
             ClearCursor()
@@ -208,6 +222,10 @@ local function cleanUp(data)
             log('Unable to find replaced item in bags: ' .. data.replaceLink)
         end
     end
+
+    state = nil
+    data = nil
+    frame:Hide()
 end
 
 do
@@ -241,7 +259,9 @@ do
     frame.teleport:SetSize(50, 50)
     frame.teleport:SetPoint('BOTTOMRIGHT', frame, 'BOTTOMRIGHT')
     frame.teleport:SetScript('PreClick', function()
-        frame:Hide()
+        frame.cancel:Disable()
+        frame.teleport:Disable()
+        ActionButton_HideOverlayGlow(frame.teleport)
     end)
     ActionButton_ShowOverlayGlow(frame.teleport)
 
@@ -255,13 +275,9 @@ do
     frame.cancel:SetPoint('BOTTOMLEFT', frame, 'BOTTOMLEFT')
     frame.cancel:SetWidth(width - 60)
     frame.cancel:SetHeight(20)
-    frame.cancel:SetText('Cancel')
+    frame.cancel:SetText('Reset Gear')
     frame.cancel:SetScript('OnClick', function()
-        frame:Hide()
-        if readyToCast ~= nil then
-            cleanUp(readyToCast)
-            readyToCast = nil
-        end
+        cleanup()
     end)
 
     frame:Hide()
@@ -270,45 +286,49 @@ end
 local events = {};
 
 events.ITEM_LOCK_CHANGED = function(bagOrSlotId, slotId)
-    if equipping == nil then
+    if not checkState('EQUIP') then
         return
     end
 
-    if slotId == nil and bagOrSlotId == equipping.inventorySlot and not IsInventoryItemLocked(equipping.inventorySlot) and GetInventoryItemID('player', equipping.inventorySlot) == equipping.itemId then
-        prepareFrame(equipping)
-        equipping = nil
+    if slotId == nil and bagOrSlotId == data.inventorySlot and not IsInventoryItemLocked(data.inventorySlot) and GetInventoryItemID('player', data.inventorySlot) == data.itemId then
+        prepareFrame()
     end
 end
 
 events.UNIT_SPELLCAST_START = function(target, castId, spellId)
-    if readyToCast == nil or target ~= 'player' then
+    if target ~= 'player' or not checkState('READY') then
         return
     end
 
-
-    if readyToCast.spellId == spellId then
-        readyToCast.castId = castId
-        casting = readyToCast
-        readyToCast = nil
+    if data.spellId == spellId then
+        data.castId = castId
+        setState('CASTING')
     end
 end
 
 events.UNIT_SPELLCAST_INTERRUPTED = function(target, castId, spellId)
-    if casting == nil or target ~= 'player' or casting.castId ~= castId then
+    if target ~= 'player' or not checkState('CASTING') or data.castId ~= castId then
         return
     end
 
-    prepareFrame(casting)
-    casting = nil
+    prepareFrame()
 end
 
 events.UNIT_SPELLCAST_SUCCEEDED = function(target, castId, spellId)
-    if casting == nil or target ~= 'player' or casting.castId ~= castId then
+    if target ~= 'player' or not checkState('CASTING') or data.castId ~= castId then
         return
     end
 
-    cleanUp(casting)
-    casting = nil
+    setState('CLEANUP')
+    frame.cancel:Enable()
+end
+
+events.PLAYER_ENTERING_WORLD = function()
+    if not checkState('CLEANUP') then
+        return
+    end
+
+    cleanup()
 end
 
 frame:SetScript('OnEvent', function(self, event, ...)
@@ -321,6 +341,7 @@ frame:RegisterEvent('ITEM_LOCK_CHANGED')
 frame:RegisterEvent('UNIT_SPELLCAST_START')
 frame:RegisterEvent('UNIT_SPELLCAST_INTERRUPTED')
 frame:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED')
+frame:RegisterEvent('PLAYER_ENTERING_WORLD')
 
 SlashCmdList.HEARTHCLOAK = port
 SLASH_HEARTHCLOAK1 = '/hearthcloak'
