@@ -106,37 +106,37 @@ HEARTHCLOAK_DESTINATIONS = {
         { -- Pugilist's Powerful Punching Ring
             itemId = 144392,
             inventorySlot = INVSLOT_FINGER1,
-            spellId = 139432
+            spellId = 139432,
             faction = 'Horde'
         },
         { -- Pit Fighter's Punching Ring
             itemId = 118908,
             inventorySlot = INVSLOT_FINGER1,
-            spellId = 139432
+            spellId = 139432,
             faction = 'Horde'
         },
         { -- The Brassiest Knuckle
             itemId = 95050,
             inventorySlot = INVSLOT_FINGER1,
-            spellId = 139432
+            spellId = 139432,
             faction = 'Horde'
         },
         { -- Pugilist's Powerful Punching Ring
             itemId = 144391,
             inventorySlot = INVSLOT_FINGER1,
-            spellId = 139437
+            spellId = 139437,
             faction = 'Alliance'
         },
         { -- Pit Fighter's Punching Ring
             itemId = 118907,
             inventorySlot = INVSLOT_FINGER1,
-            spellId = 139437
+            spellId = 139437,
             faction = 'Alliance'
         },
         { -- The Brassiest Knuckle
             itemId = 95051,
             inventorySlot = INVSLOT_FINGER1,
-            spellId = 139437
+            spellId = 139437,
             faction = 'Alliance'
         },
     },
