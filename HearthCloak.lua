@@ -131,28 +131,33 @@ local function port(msg)
         return
     end
 
+    local faction = UnitFactionGroup('player')
     local found = nil
     local cooldowns = {}
 
     for _, item in pairs(destination) do
-        if item.inventorySlot ~= nil then
-            found = findTeleportItemInInventory(item.inventorySlot, item.itemId, cooldowns)
-            if found ~= nil then
-                found.itemId = item.itemId
-                found.spellId = item.spellId
-                break
+        if item.faction == nil or item.faction == faction then
+            if item.inventorySlot ~= nil then
+                found = findTeleportItemInInventory(item.inventorySlot, item.itemId, cooldowns)
+                if found ~= nil then
+                    found.itemId = item.itemId
+                    found.spellId = item.spellId
+                    break
+                end
             end
         end
     end
 
     if found == nil then
         for _, item in pairs(destination) do
-            found = findTeleportItemInBags(item.itemId, cooldowns)
-            if found ~= nil then
-                found.itemId = item.itemId
-                found.spellId = item.spellId
-                found.inventorySlot = item.inventorySlot
-                break
+            if item.faction == nil or item.faction == faction then
+                found = findTeleportItemInBags(item.itemId, cooldowns)
+                if found ~= nil then
+                    found.itemId = item.itemId
+                    found.spellId = item.spellId
+                    found.inventorySlot = item.inventorySlot
+                    break
+                end
             end
         end
     end
