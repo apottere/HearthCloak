@@ -4,6 +4,7 @@
 ## Author: apottere
 ## Version: @project-version@
 ## X-Date: @project-date-iso@
+## SavedVariablesPerCharacter: HEARTHCLOAK_OPTIONS
 
 data.lua
 HearthCloak.lua

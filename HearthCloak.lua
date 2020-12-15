@@ -3,6 +3,7 @@ local _, ns = ...
 local destinations = HEARTHCLOAK_DESTINATIONS
 local color = '|cff42f58d'
 local reset = '|r'
+local options = nil
 local state = nil
 local data = nil
 local frame = CreateFrame('Frame', nil, UIParent, 'BackdropTemplate')
@@ -24,6 +25,13 @@ end
 
 local function prepareFrame()
     setState('READY')
+
+    if data.bag == nil then
+        frame.cancel:SetText('Close')
+    else
+        frame.cancel:SetText('Reset Gear')
+    end
+
     frame.title:SetText(color .. 'HearthCloak: ' .. reset .. data.destination)
     frame.cancel:Enable()
     frame.teleport:Enable()
@@ -217,7 +225,7 @@ local function cleanup()
             ClearCursor()
             PickupContainerItem(found.bag, found.slot)
             PickupInventoryItem(data.inventorySlot)
-            log('Reequipped ' .. data.replaceLink)
+            log('Re-equipped ' .. data.replaceLink)
         else
             log('Unable to find replaced item in bags: ' .. data.replaceLink)
         end
@@ -228,19 +236,47 @@ local function cleanup()
     frame:Hide()
 end
 
-do
+local function init()
+    if HEARTHCLOAK_OPTIONS == nil then
+        HEARTHCLOAK_OPTIONS = {}
+    end
+
+    options = HEARTHCLOAK_OPTIONS
+    if options.frame == nil then
+        options.frame = {}
+    end
+
+    if options.frame.point == nil then
+        options.frame.point = 'CENTER'
+    end
+
+    if options.frame.x == nil then
+        options.frame.x = 0
+    end
+
+    if options.frame.y == nil then
+        options.frame.y = 0
+    end
+
     local width = 180
     local fontHeight = 18
 
     frame:SetWidth(width)
     frame:SetHeight(75)
-    frame:SetPoint('CENTER')
+    frame:SetClampedToScreen(true)
+    frame:SetPoint(options.frame.point, options.frame.x, options.frame.y)
     frame:SetToplevel(true)
     frame:SetMovable(true)
     frame:EnableMouse(true)
     frame:RegisterForDrag('LeftButton')
     frame:SetScript('OnDragStart', frame.StartMoving)
-    frame:SetScript('OnDragStop', frame.StopMovingOrSizing)
+    frame:SetScript('OnDragStop', function ()
+        frame:StopMovingOrSizing()
+        local point, _, _, newX, newY = frame:GetPoint()
+        options.frame.point = point
+        options.frame.x = newX
+        options.frame.y = newY
+    end)
     frame:SetBackdrop({ 
         bgFile = 'Interface\\DialogFrame\\UI-DialogBox-Background', 
         tile = true,
@@ -275,7 +311,7 @@ do
     frame.cancel:SetPoint('BOTTOMLEFT', frame, 'BOTTOMLEFT')
     frame.cancel:SetWidth(width - 60)
     frame.cancel:SetHeight(20)
-    frame.cancel:SetText('Reset Gear')
+    frame.cancel:SetText('Close')
     frame.cancel:SetScript('OnClick', function()
         cleanup()
     end)
@@ -284,6 +320,14 @@ do
 end
 
 local events = {};
+
+events.ADDON_LOADED = function(name)
+    if name ~= 'HearthCloak' then
+        return
+    end
+
+    init()
+end
 
 events.ITEM_LOCK_CHANGED = function(bagOrSlotId, slotId)
     if not checkState('EQUIP') then
@@ -337,6 +381,7 @@ frame:SetScript('OnEvent', function(self, event, ...)
         handler(...)
     end
 end)
+frame:RegisterEvent('ADDON_LOADED')
 frame:RegisterEvent('ITEM_LOCK_CHANGED')
 frame:RegisterEvent('UNIT_SPELLCAST_START')
 frame:RegisterEvent('UNIT_SPELLCAST_INTERRUPTED')
