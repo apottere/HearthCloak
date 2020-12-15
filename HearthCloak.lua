@@ -133,6 +133,10 @@ local function findReplacedGearInBags(searchItemId, searchLink, probablyBag, pro
 end
 
 local function port(msg)
+    if data ~= nil then
+        return
+    end
+
     local destination
     if not msg or msg == '' then
         destination = nil
