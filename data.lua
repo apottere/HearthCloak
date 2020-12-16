@@ -39,6 +39,11 @@ HEARTHCLOAK_DESTINATIONS = {
             inventorySlot = INVSLOT_FINGER1,
             spellId = 54406
         },
+        { -- Ring of the Kirin Tor
+            itemId = 44935,
+            inventorySlot = INVSLOT_FINGER1,
+            spellId = 54406
+        },
         { -- Signet of the Kirin Tor
             itemId = 40585,
             inventorySlot = INVSLOT_FINGER1,
@@ -49,13 +54,18 @@ HEARTHCLOAK_DESTINATIONS = {
             inventorySlot = INVSLOT_FINGER1,
             spellId = 54406
         },
-        { -- Inscribed Signet of the Kirin Tor
-            itemId = 45691,
+        { -- Inscribed Band of the Kirin Tor
+            itemId = 45688,
             inventorySlot = INVSLOT_FINGER1,
             spellId = 54406
         },
-        { -- Inscribed Band of the Kirin Tor
-            itemId = 45688,
+        { -- Inscribed Ring of the Kirin Tor
+            itemId = 45690,
+            inventorySlot = INVSLOT_FINGER1,
+            spellId = 54406
+        },
+        { -- Inscribed Signet of the Kirin Tor
+            itemId = 45691,
             inventorySlot = INVSLOT_FINGER1,
             spellId = 54406
         },
@@ -64,13 +74,18 @@ HEARTHCLOAK_DESTINATIONS = {
             inventorySlot = INVSLOT_FINGER1,
             spellId = 54406
         },
-        { -- Etched Signet of the Kirin Tor
-            itemId = 48957,
+        { -- Etched Band of the Kirin Tor
+            itemId = 48954,
             inventorySlot = INVSLOT_FINGER1,
             spellId = 54406
         },
-        { -- Etched Band of the Kirin Tor
-            itemId = 48954,
+        { -- Etched Ring of the Kirin Tor
+            itemId = 48956,
+            inventorySlot = INVSLOT_FINGER1,
+            spellId = 54406
+        },
+        { -- Etched Signet of the Kirin Tor
+            itemId = 48957,
             inventorySlot = INVSLOT_FINGER1,
             spellId = 54406
         },
@@ -79,13 +94,18 @@ HEARTHCLOAK_DESTINATIONS = {
             inventorySlot = INVSLOT_FINGER1,
             spellId = 54406
         },
-        { -- Runed Signet of the Kirin Tor
-            itemId = 51557,
+        { -- Runed Band of the Kirin Tor
+            itemId = 51560,
             inventorySlot = INVSLOT_FINGER1,
             spellId = 54406
         },
-        { -- Runed Band of the Kirin Tor
-            itemId = 51560,
+        { -- Runed Ring of the Kirin Tor
+            itemId = 51559,
+            inventorySlot = INVSLOT_FINGER1,
+            spellId = 54406
+        },
+        { -- Runed Signet of the Kirin Tor
+            itemId = 51557,
             inventorySlot = INVSLOT_FINGER1,
             spellId = 54406
         },
