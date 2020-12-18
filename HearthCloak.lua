@@ -64,6 +64,10 @@ local function findTeleportItemInInventory(inventorySlot, searchItemId, cooldown
     if inventorySlot == INVSLOT_FINGER1 then
         return findTeleportItemInInventory(INVSLOT_FINGER2, searchItemId, cooldowns)
     end
+
+    if inventorySlot == INVSLOT_TRINKET1 then
+        return findTeleportItemInInventory(INVSLOT_TRINKET2, searchItemId, cooldowns)
+    end
 end
 
 local function findTeleportItemInBags(searchItemId, cooldowns)

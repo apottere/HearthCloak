@@ -160,4 +160,11 @@ HEARTHCLOAK_DESTINATIONS = {
             faction = 'Alliance'
         },
     },
+    ['timeless-isle'] = {
+        { -- Call of the Mists
+            itemId = 145430,
+            inventorySlot = INVSLOT_TRINKET1,
+            spellId = 145430,
+        },
+    },
 }
