@@ -161,8 +161,8 @@ HEARTHCLOAK_DESTINATIONS = {
         },
     },
     ['timeless-isle'] = {
-        { -- Call of the Mists
-            itemId = 145430,
+        { -- Time-Lost Artifact
+            itemId = 103678,
             inventorySlot = INVSLOT_TRINKET1,
             spellId = 145430,
         },
